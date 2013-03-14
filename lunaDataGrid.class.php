@@ -74,6 +74,19 @@ class lunaDataGrid {
         
         $this->max = $max;
         
+        $this->buttons = array();
+        
+    }
+    
+    /*
+     * function setButton
+     * @param $array
+     */
+    
+    function setButton($name , $action ) {
+        
+        $this->buttons[] = array( 'name' => $name, 'action' => $action );
+        
     }
     
     
@@ -118,18 +131,33 @@ class lunaDataGrid {
             
         }
         
+        
+        
         $db->add_consult("SELECT ".join(',',$this->colData)." FROM ".$this->table." {$where} {$order} {$limit}");
         
         $sql = $db->query();
         
-        return $sql[0];        
+        if( $sql[0] ){
+            
+            return $sql[0];
+        
+        } else {
+            
+            // Si la consulta no tiene resultados
+            // Proximo manejo de errores personalizados
+            
+            return array();
+            
+        }
+        
+        
     }
     
     /*
      * function build
      */
     
-    function build() {
+    public function build() {        
         
         $this->data = $this->data();
         
@@ -162,6 +190,23 @@ class lunaDataGrid {
                 foreach($v as $row){
                     
                     $html.= "<td>$row</td>";
+                    
+                }
+                
+                        
+                if( count($this->buttons) >= 1){
+                
+                    $html.='<td>';
+                    
+                        foreach( $this->buttons as $acc ):
+                        
+                            $accion = preg_replace("@\%([a-z0-9]+)\%@e", '$v["$1"]', $acc["action"]);
+                        
+                            $html.='<a href="'.$accion.'">'.$acc["name"].'</a>';
+                        
+                        endforeach;
+                    
+                    $html.='</td>';
                     
                 }
                 
