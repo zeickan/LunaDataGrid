@@ -1,3 +1,28 @@
 body {
     background: #EEE;
 }
+
+
+/* LunaDataGrid */
+
+
+.lunaGrid {
+    border:1px solid #CCC;
+}
+
+
+
+.lunaGrid tfoot tr td.pagination {
+    text-align: center;
+}
+
+.lunaGrid tfoot a {
+    color: #888;
+    text-decoration: none;
+}
+
+.lunaGrid tfoot a.current {
+    border:1px dotted #555;
+    color: #333;
+    text-decoration: none;
+}
