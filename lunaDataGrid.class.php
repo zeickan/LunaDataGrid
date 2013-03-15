@@ -54,9 +54,15 @@ class lunaDataGrid {
      */
     var $colName;
     
+    /*
+     * @var array relationship
+     */
+    
+    var $colRelationship;
     
     
-    function __construct($table, $where = null , $order = null, $colData=array('*'), $colName=array('*'), $pagination = false, $html=true, $max = 10 ) {
+    
+    function __construct($table, $where = null , $order = null, $colData=array('*'), $colName=array('*'), $pagination = false, $html=true, $max = 10, $colRelationship = null , $editableField = null) {
         
         $this->html = $html;
         
@@ -76,6 +82,16 @@ class lunaDataGrid {
         
         $this->buttons = array();
         
+        $this->relTable = array();
+        
+        $this->selectValue = "id";
+        
+        $this->selectText = "description";
+        
+        $this->colRelationship = $colRelationship;
+        
+        $this->editableField = $editableField;
+        
     }
     
     /*
@@ -89,6 +105,18 @@ class lunaDataGrid {
         
     }
     
+    
+    /*
+     * function setTable
+     * @param $array
+     */
+    
+    function setTable( $name , $value ) {
+        
+        $this->relTable[$name] = (string) "$value";
+        
+    }
+        
     
     
     /*
@@ -132,6 +160,29 @@ class lunaDataGrid {
         }
         
         
+        if( $this->colRelationship ){
+            
+            $i = 0;
+            
+            foreach($this->colRelationship as $row){
+                
+                $rel = explode("|",$row);
+                
+                $attr = str_replace(".","",strstr($rel[0],"."));
+                
+                $db->add_consult("SELECT * FROM {$rel[1]}");
+                
+                $this->setTable( $attr ,$i );
+                
+                $i++;
+                
+            }
+            
+            $this->sql = $db->query();
+            
+            $db->unset_consult();
+            
+        }
         
         $db->add_consult("SELECT ".join(',',$this->colData)." FROM ".$this->table." {$where} {$order} {$limit}");
         
@@ -187,9 +238,35 @@ class lunaDataGrid {
             
                 $html.= '<tr>';
             
-                foreach($v as $row){
+                foreach($v as $raw => $row){
                     
-                    $html.= "<td>$row</td>";
+                    if( is_string($this->relTable[$raw]) ):
+                    
+                        $html.= "<td>".$this->tableSelect($this->relTable[$raw])."</td>";
+                    
+                    elseif( $this->editableField[$raw] ):
+                        
+                        switch($this->editableField[$raw]){
+                            
+                            case "input":
+                                
+                                $html.= '<td><input name="'.$raw.'['.$v["id"].']" type="text" value="'.$row.'" ></td>';
+                                
+                            break;
+                        
+                            case "textarea":
+                                
+                                $html.= '<td><textarea name="'.$raw.'['.$v["id"].']">'.$row.'</textarea></td>';
+                                
+                            break;
+                            
+                        }
+
+                    else:
+                    
+                        $html.= "<td>$row</td>";
+                    
+                    endif;
                     
                 }
                 
@@ -315,6 +392,31 @@ class lunaDataGrid {
             return join(" ",$pagination);
 
         } 
+        
+    }
+    
+    
+    protected function tableSelect($id){
+        
+        $sql = $this->sql[$id];
+        
+        if( $sql ):
+        
+            $r = array();
+            
+            $r[] = '<select name="">';
+        
+            while(list($k,$v)=each($sql)){
+            
+                $r[] = "<option value=\"{$v[$this->selectValue]}\">".utf8_encode($v[$this->selectText])."</option>";  
+                
+            }
+            
+            $r[] = '</select>';
+            
+        endif;
+        
+        return join(" ",$r);
         
     }
     
