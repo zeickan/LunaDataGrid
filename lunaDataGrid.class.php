@@ -19,6 +19,11 @@ class lunaDataGrid {
     var $html;
     
     /*
+     * @var bool $ajax print table
+     */
+    var $ajax;
+    
+    /*
      * @var string $table print table
      */
     var $table;
@@ -43,6 +48,10 @@ class lunaDataGrid {
      */
     var $max;
     
+    /*
+     * @var string checkbox print table
+     */
+    var $checkbox;
     
     /*
      * @var array $colData print table
@@ -62,7 +71,7 @@ class lunaDataGrid {
     
     
     
-    function __construct($table, $where = null , $order = null, $colData=array('*'), $colName=array('*'), $pagination = false, $html=true, $max = 10, $colRelationship = null , $editableField = null) {
+    function __construct($table, $where = null , $order = null, $colData=array('*'), $colName=array('*'), $ajax = false, $pagination = false, $html=true, $max = 10, $colRelationship = null , $editableField = null, $checkbox = null) {
         
         $this->html = $html;
         
@@ -75,6 +84,8 @@ class lunaDataGrid {
         $this->colData = $colData;
         
         $this->colName = $colName;
+        
+        $this->ajax = $ajax;
         
         $this->pagination = $pagination;
         
@@ -91,6 +102,10 @@ class lunaDataGrid {
         $this->colRelationship = $colRelationship;
         
         $this->editableField = $editableField;
+        
+        $this->checkbox = $checkbox;
+        
+        $this->file = "index.php?";
         
     }
     
@@ -145,7 +160,19 @@ class lunaDataGrid {
             
             $pages = ceil($total/$this->max);
             
-            $pag = (int) ($_GET['pag'])?($_GET['pag']-1):0;
+            if( $_POST['pag'] >= 1 ){
+                
+                $pag = (int) ($_POST['pag'])?($_POST['pag']-1):0;
+                
+                $this->pag  = (int) (isset($_POST['pag']))?$_POST['pag']:'1';
+                
+            } else {
+                
+                $pag = (int) ($_GET['pag'])?($_GET['pag']-1):0;
+                
+                $this->pag  = (int) (isset($_GET['pag']))?$_GET['pag']:'1';
+                
+            }
             
             $def = (int) ($pag >= 1)?($pag*$this->max):'0';
             
@@ -154,8 +181,6 @@ class lunaDataGrid {
             $limit = "LIMIT {$def},{$this->max}";
             
             $this->pages = $pages;
-            
-            $this->pag  = (int) (isset($_GET['pag']))?$_GET['pag']:'1';
             
         }
         
@@ -208,7 +233,7 @@ class lunaDataGrid {
      * function build
      */
     
-    public function build() {        
+    public function build(){
         
         $this->data = $this->data();
         
@@ -220,11 +245,21 @@ class lunaDataGrid {
         
         $html.= '<thead><tr>';
         
+            if($this->checkbox){
+                    
+                $html.= '<th></th>';
+                    
+            }
+        
+        if( $this->colName ):
+        
             foreach($this->colName as $row){
                 
                 $html.= "<th>$row</th>";
                 
             }
+        
+        endif;
         
         $html.= '</tr></thead>';
         
@@ -237,6 +272,12 @@ class lunaDataGrid {
             while( list($k,$v) = each($this->data) ):
             
                 $html.= '<tr>';
+                
+                if($this->checkbox){
+                    
+                    $html.= '<td><input type="checkbox" name="id['.$v["id"].']" value="1"></td>';
+                    
+                }
             
                 foreach($v as $raw => $row){
                     
@@ -323,19 +364,29 @@ class lunaDataGrid {
      * @access private
      */
     
-    private function pagination($doc = '') {
+    private function pagination() {
         
         if( $this->pages > 1){
+            
+            if( $this->ajax ){
+                
+                $file = "#";
+                
+            } else {
+                
+                $file = $this->file;
+            }
+            
                     
             $pagination = array();
     
             if( $this->pag > 1 ){
                 
-                $pagination[] = '<a href="index.php">&laquo; Primera página</a> ';
+                $pagination[] = '<a href="'.$file.'" data-pag="0">&laquo; Primera página</a> ';
                 
                 if( $pag != 2):
                 
-                    $pagination[] = '<a href="?pag='.(($this->pag)-1).'">&laquo; Anterior</a>';
+                    $pagination[] = '<a href="'.$file.'pag='.(($this->pag)-1).'" data-pag="'.(($this->pag)-1).'">&laquo; Anterior</a>';
                     
                 endif;
             }
@@ -369,11 +420,11 @@ class lunaDataGrid {
                     
                     if( $this->pag == $i ){
                         
-                        $pagination[] = '<a href="?pag='.$i.'" class="number current">'.$i.'</a>';
+                        $pagination[] = '<a href="'.$file.'pag='.$i.'" data-pag="'.$i.'" class="number current">'.$i.'</a>';
     
                     } else {
                         
-                        $pagination[] = '<a href="?pag='.$i.'" class="number">'.$i.'</a>';
+                        $pagination[] = '<a href="'.$file.'pag='.$i.'" data-pag="'.$i.'" class="number">'.$i.'</a>';
     
                     }
                     
@@ -383,9 +434,9 @@ class lunaDataGrid {
         
             if( $this->pag < $this->pages ){
                 
-                $pagination[] = '<a href="?pag='.($this->pag+1).'">Siguiente &raquo;</a>';
+                $pagination[] = '<a href="'.$file.'pag='.($this->pag+1).'" data-pag="'.($this->pag+1).'">Siguiente &raquo;</a>';
                 
-                $pagination[] = '<a href="?pag='.$this->pages.'">Ultima página &raquo;</a>';
+                $pagination[] = '<a href="'.$file.'pag='.$this->pages.'"  data-pag="'.$this->pages.'">Ultima página &raquo;</a>';
                 
             }
             

@@ -16,16 +16,17 @@ $grid->pagination = true;
 
 $grid->max = 3;
 
+$grid->checkbox = true;
 
 $grid->editableField = array( "username" => "input" ,"token" => "textarea" );
 
 $grid->colRelationship = array( "users.group_id|users_groups" );
 
-
-
 $grid->setButton("Editar","edit.php?id=%id%");
 
 $grid->setButton("Eliminar","del.php?id=%id%");
+
+$table = $grid->build();
 
 
 ?>
@@ -46,7 +47,7 @@ $grid->setButton("Eliminar","del.php?id=%id%");
 
 <body>
 
-<div><?=$grid->build(); ?></div>
+<div><?=$table ?></div>
 
 </body>
 </html>

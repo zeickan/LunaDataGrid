@@ -14,7 +14,28 @@
         
         $(document).ready(function() {
             
-            $("div").red();
+            $("div").lunaDataGrid({
+                
+                    file:   'ajax.php',
+                    table:  'users INNER JOIN users_profile ON users.username = users_profile.aka',
+                    order:  "id DESC",
+                    title:  "Lista de usuarios",
+                    
+                    colname : Array("ID","Usuario","Correo","Grupo"),
+                    coldata : Array("users.id","users.username","users.mail","users.group_id"),
+                    
+                    checkbox : true,
+                    
+                    pagination:   true,
+                    itemsPerPage: 2,
+                    
+                    editableField : { "username":"input" , "mail":"textarea" },
+                    
+                    relationships : { "group_id":"users.group_id|users_groups" },
+                    
+                    setButton: { "button1": 'accion.php?id=%id%' }
+                    
+                });
             
         });
         
@@ -24,9 +45,7 @@
 
 <body>
 
-<div>Hello
-    <div>world!</div>
-</div>
+<div>Hello world!</div>
 
 </body>
 </html>
