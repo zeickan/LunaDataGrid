@@ -6,6 +6,7 @@
         var settings = $.extend( {
             'file'      : 'ajax.php',
             'table'     : null,
+            'where'		: null,
             'order'     : null,
             'title'     : null,
             'colname'   : null,
@@ -37,6 +38,7 @@
                 data: {
                         sql:    settings['table'],
                         title:  settings['title'],
+                        where:	settings['where'],
                         order:  settings['order'],
                         
                         colname:   settings['colname'],

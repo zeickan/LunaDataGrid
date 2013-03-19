@@ -14,6 +14,8 @@ $grid->colName = ($_POST['colname'])?$_POST['colname']:null;
 
 $grid->colData = ($_POST['coldata'])?$_POST['coldata']:array("*");
 
+$grid->where = ($_POST['where'])?$_POST['where']:null;
+
 $grid->order = ($_POST['order'])?$_POST['order']:false;
 
 $grid->pagination = ($_POST['pagination'] == "true")?true:false;

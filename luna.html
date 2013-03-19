@@ -14,19 +14,38 @@
         
         $(document).ready(function() {
             
-            $("div").lunaDataGrid({
-                
+            $("#lunaGrid").lunaDataGrid({
+                    
+                    // Archivo de proceso
                     file:   'ajax.php',
+                    
+                    /* SQL options table (string), where (array), order (string)
+                     * Conserva la sintaxis de SQL (permite usar Joins y definir Order y tipo de WHERE)
+                     * Ejem: La tabla es 'first_table'
+                     *
+                     * table:  'first_table',
+                     *
+                     *  O Usando un inner Join
+                     * 
+                     * table:  'first_table INNER JOIN secound_table ON first_table.relid = first_table.relid',
+                     */
+                    
                     table:  'users INNER JOIN users_profile ON users.username = users_profile.aka',
-                    order:  "id DESC",
+                    
+                    where:  ["1=1"],
+                    
+                    order:  "id DESC",                    
+                    
                     title:  "Lista de usuarios",
                     
-                    colname : Array("ID","Usuario","Correo","Grupo"),
-                    coldata : Array("users.id","users.username","users.mail","users.group_id"),
+                    colname : ["ID","Usuario","Correo","Grupo"],
+                    
+                    coldata : ["users.id","users.username","users.mail","users.group_id"],
                     
                     checkbox : true,
                     
                     pagination:   true,
+                    
                     itemsPerPage: 2,
                     
                     editableField : { "username":"input" , "mail":"textarea" },
@@ -45,7 +64,7 @@
 
 <body>
 
-<div>Hello world!</div>
+<div id="lunaGrid"></div>
 
 </body>
 </html>
