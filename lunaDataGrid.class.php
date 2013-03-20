@@ -107,6 +107,36 @@ class lunaDataGrid {
         
         $this->file = "index.php?";
         
+        
+    }
+    
+    /*
+     * function checkEmpty
+     */
+    
+    private function checkEmpty(){
+        
+        $this->title = ($this->title)?$this->title:null;
+        
+        $this->colName = ($this->colName)?$this->colName:null;
+        
+        $this->colData = ($this->colData)?$this->colData:array("*");
+        
+        $this->where = ($this->where)?$this->where:null;
+        
+        $this->order = ($this->order)?$this->order:null;
+        
+        $this->pagination = ($this->pagination == "true")?true:false;
+        
+        $this->max = ($this->max)?$this->max:false;
+        
+        $this->checkbox = ($this->checkbox == "true")?true:false;
+        
+        $this->editableField = ($this->editableField)?$this->editableField:null;
+        
+        $this->colRelationship = ($this->colRelationship)?$this->colRelationship:null;
+
+        
     }
     
     /*
@@ -139,6 +169,12 @@ class lunaDataGrid {
      */
     
     protected function data() {
+        
+        if( $this->ajax ):
+        
+            $this->checkEmpty();
+            
+        endif;
         
         $db = new db_pdo;
         
@@ -209,7 +245,9 @@ class lunaDataGrid {
             
         }
         
-        $db->add_consult("SELECT ".join(',',$this->colData)." FROM ".$this->table." {$where} {$order} {$limit}");
+        $consult = "SELECT ".join(',',$this->colData)." FROM ".$this->table." {$where} {$order} {$limit}"; 
+        
+        $db->add_consult($consult);
         
         $sql = $db->query();
         
@@ -239,7 +277,7 @@ class lunaDataGrid {
         
         $html = '<table class="lunaGrid">';
         
-        $html.= "<caption>{$this->title}</caption>";
+        $html.= ($this->title)?"<caption>{$this->title}</caption>":'';
         
         /* THEAD */
         
@@ -283,7 +321,7 @@ class lunaDataGrid {
                     
                     if( is_string($this->relTable[$raw]) ):
                     
-                        $html.= "<td>".$this->tableSelect($this->relTable[$raw])."</td>";
+                        $html.= "<td>".$this->tableSelect($this->relTable[$raw],$v['id'])."</td>";
                     
                     elseif( $this->editableField[$raw] ):
                         
@@ -447,15 +485,17 @@ class lunaDataGrid {
     }
     
     
-    protected function tableSelect($id){
+    protected function tableSelect($id,$parent = null){
         
         $sql = $this->sql[$id];
+        
+        $rel = array_search($id,$this->relTable);
         
         if( $sql ):
         
             $r = array();
             
-            $r[] = '<select name="">';
+            $r[] = "<select name=\"{$rel}[{$parent}]\">";
         
             while(list($k,$v)=each($sql)){
             

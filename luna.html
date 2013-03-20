@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>  
     <meta charset="UTF-8">
@@ -34,19 +33,40 @@
                     
                     where:  ["1=1"],
                     
-                    order:  "id DESC",                    
+                    order:  "users.id DESC",
                     
-                    title:  "Lista de usuarios",
+                    /* Columnas
+                     * colname array Define el nombre de las columnas para la tabla (HTML)
+                     *
+                     * coldata array Define los campos a pedir de la tabla
+                     * 
+                    */
                     
                     colname : ["ID","Usuario","Correo","Grupo"],
                     
                     coldata : ["users.id","users.username","users.mail","users.group_id"],
                     
+                    /* Paginación
+                     *
+                     * true     Activa la paginación
+                     * false    No pagina resultados 
+                     *
+                     * itemsPerPage Si la paginación está activa defines el maximo de elementos por página
+                     * Si no defines usando está opción y paginación está activa el default sera de 10 por página
+                     */
+                    
+                    pagination: true,
+                    
+                    itemsPerPage: 3,
+                    
+                    /* Titulo para el caption */
+                    
+                    title:  "Lista de usuarios",
+                    
+                    /* Activar checkboxs */ 
+                    
                     checkbox : true,
                     
-                    pagination:   true,
-                    
-                    itemsPerPage: 2,
                     
                     editableField : { "username":"input" , "mail":"textarea" },
                     

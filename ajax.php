@@ -1,7 +1,5 @@
 <?php
 
-//echo"<pre>".print_r($_POST['pag'],1)."</pre>";
-
 require_once 'lunaDataGrid.class.php';
 
 $grid = new lunaDataGrid( $_POST['sql'] );
@@ -10,23 +8,23 @@ $grid->ajax = true;
 
 $grid->title = $_POST['title'];
 
-$grid->colName = ($_POST['colname'])?$_POST['colname']:null;
+$grid->colName = $_POST['colname'];
 
-$grid->colData = ($_POST['coldata'])?$_POST['coldata']:array("*");
+$grid->colData = $_POST['coldata'];
 
-$grid->where = ($_POST['where'])?$_POST['where']:null;
+$grid->where = $_POST['where'];
 
-$grid->order = ($_POST['order'])?$_POST['order']:false;
+$grid->order = $_POST['order'];
 
-$grid->pagination = ($_POST['pagination'] == "true")?true:false;
+$grid->pagination = $_POST['pagination'];
 
-$grid->max = ($_POST['itemsPerPage'])?$_POST['itemsPerPage']:false;
+$grid->max = $_POST['itemsPerPage'];
 
-$grid->checkbox = ($_POST['checkbox'] == "true")?true:false;
+$grid->checkbox = $_POST['checkbox'];
 
-$grid->editableField = ($_POST['editableField'])?$_POST['editableField']:null;
+$grid->editableField = $_POST['editableField'];
 
-$grid->colRelationship = ($_POST['relationships'])?$_POST['relationships']:null;
+$grid->colRelationship = $_POST['relationships'];
 
 if( $_POST['setButton'] ){
     

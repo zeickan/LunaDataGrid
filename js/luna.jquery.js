@@ -1,6 +1,7 @@
 (function( $ ){
 
-    $.fn.lunaDataGrid = function( options ) {  
+    $.fn.lunaDataGrid = function( options ) {
+    
 
         // Seteamos las opciones por default
         var settings = $.extend( {
@@ -26,7 +27,30 @@
             
         }, options);
     
-        return this.each(function() {        
+        return this.each(function() {
+            
+            if ( settings['pag'] == null ) {
+                
+                var jash = window.location.hash;
+                
+                if ( jash ) {
+                
+                    var getPag = jash.match(/([0-9]+)/gi);
+                
+                    var pagina = getPag[0];
+                    
+                } else {
+                    
+                    var pagina = null;
+                    
+                }
+            
+            } else {
+                
+                var pagina = settings['pag'];
+                
+            }
+
     
             // Petición al archivo que genera las opciones.
             
@@ -46,7 +70,8 @@
                         
                         checkbox: settings['checkbox'],
                         
-                        pag: settings['pag'],
+                        
+                        pag: pagina,
                         pagination: settings['pagination'],
                         itemsPerPage: settings['itemsPerPage'],
                         
@@ -90,8 +115,6 @@
             set = merge(options,pags);
             
             $(box).lunaDataGrid(set);
-            
-            return false;
             
         });
         
