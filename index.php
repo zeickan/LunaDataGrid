@@ -6,21 +6,21 @@ $grid = new lunaDataGrid("users INNER JOIN users_profile ON users.username = use
 
 $grid->title = "Lista de usuarios";
 
-$grid->colName = array("ID","Usuario","Email","Group","Token","Nombre","Apellido","Acciones");
+$grid->colName = array("ID","Usuario","Email","Nombre","Acciones");
 
-$grid->colData = array('users.id', 'users.username', 'users.mail', 'users.group_id', 'users.token', 'users_profile.`name`', 'users_profile.last_name');
+$grid->colData = array('users.id', 'users.username', 'users.mail', "CONCAT(users_profile.`name` ,' ', users_profile.last_name ) as nombre");
 
 $grid->order = "id ASC";
 
 $grid->pagination = true;
-
+    
 $grid->max = 3;
 
-$grid->checkbox = true;
+//$grid->checkbox = true;
 
-$grid->editableField = array( "username" => "input" ,"token" => "textarea" );
+//$grid->editableField = array( "username" => "input" ,"token" => "textarea" );
 
-$grid->colRelationship = array( "users.group_id|users_groups" );
+//$grid->colRelationship = array( "users.group_id|users_groups" );
 
 $grid->setButton("Editar","edit.php?id=%id%");
 

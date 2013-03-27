@@ -42,7 +42,7 @@
                      * 
                     */
                     
-                    colname : ["ID","Usuario","Correo","Grupo"],
+                    colname : ["ID","Usuario","Correo","Grupo","Acciones"],
                     
                     coldata : ["users.id","users.username","users.mail","users.group_id"],
                     
@@ -68,7 +68,7 @@
                     checkbox : true,
                     
                     
-                    editableField : { "username":"input" , "mail":"textarea" },
+                    editableField : { "username":"input" , "mail":"input" },
                     
                     relationships : { "group_id":"users.group_id|users_groups" },
                     
