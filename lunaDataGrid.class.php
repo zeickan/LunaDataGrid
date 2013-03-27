@@ -69,9 +69,13 @@ class lunaDataGrid {
     
     var $colRelationship;
     
+    /*
+     * @var string private key
+     */
     
+    var $privateKey;
     
-    function __construct($table, $where = null , $order = null, $colData=array('*'), $colName=array('*'), $ajax = false, $pagination = false, $html=true, $max = 10, $colRelationship = null , $editableField = null, $checkbox = null) {
+    function __construct($table, $where = null , $order = null, $colData=array('*'), $colName=array('*'), $ajax = false, $pagination = false, $html=true, $max = 10, $colRelationship = null , $editableField = null, $checkbox = null,$privateKey='id') {
         
         $this->html = $html;
         
@@ -106,6 +110,8 @@ class lunaDataGrid {
         $this->checkbox = $checkbox;
         
         $this->file = "index.php?";
+        
+        $this->pk = $privateKey;
         
         
     }
@@ -313,7 +319,7 @@ class lunaDataGrid {
                 
                 if($this->checkbox){
                     
-                    $html.= '<td><input type="checkbox" name="id['.$v["id"].']" value="1"></td>';
+                    $html.= '<td><input type="checkbox" id="checkbox-'.$k.'-'.$v[$this->pk].'" name="id['.$v[$this->pk].']" value="1" class="regular-checkbox"><label for="checkbox-'.$k.'-'.$v[$this->pk].'"></label></td>';
                     
                 }
             
@@ -321,7 +327,7 @@ class lunaDataGrid {
                     
                     if( is_string($this->relTable[$raw]) ):
                     
-                        $html.= "<td>".$this->tableSelect($this->relTable[$raw],$v['id'])."</td>";
+                        $html.= "<td>".$this->tableSelect($this->relTable[$raw],$v[$this->pk])."</td>";
                     
                     elseif( $this->editableField[$raw] ):
                         
@@ -329,13 +335,13 @@ class lunaDataGrid {
                             
                             case "input":
                                 
-                                $html.= '<td><input name="'.$raw.'['.$v["id"].']" type="text" value="'.$row.'" ></td>';
+                                $html.= '<td><input name="'.$raw.'['.$v[$this->pk].']" type="text" value="'.$row.'" ></td>';
                                 
                             break;
                         
                             case "textarea":
                                 
-                                $html.= '<td><textarea name="'.$raw.'['.$v["id"].']">'.$row.'</textarea></td>';
+                                $html.= '<td><textarea name="'.$raw.'['.$v[$this->pk].']">'.$row.'</textarea></td>';
                                 
                             break;
                             
@@ -352,7 +358,7 @@ class lunaDataGrid {
                         
                 if( count($this->buttons) >= 1){
                 
-                    $html.='<td>';
+                    $html.='<td class="buttons">';
                     
                         foreach( $this->buttons as $acc ):
                         
@@ -379,9 +385,11 @@ class lunaDataGrid {
         
         if( $this->pagination ){
             
+            $i = ($this->checkbox)?1:0;
+            
             $html.= '<tfoot>';
             
-            $html.= '<tr><td class="pagination" colspan="'.count($this->colName).'">'.$this->pagination().'</td></tr>';
+            $html.= '<tr><td class="pagination" colspan="'.(count($this->colName)+$i).'">'.$this->pagination().'</td></tr>';
             
             $html.= '</tfoot>';
             
@@ -495,7 +503,7 @@ class lunaDataGrid {
         
             $r = array();
             
-            $r[] = "<select name=\"{$rel}[{$parent}]\">";
+            $r[] = "<label class=\"sel\"><select name=\"{$rel}[{$parent}]\">";
         
             while(list($k,$v)=each($sql)){
             
@@ -503,7 +511,7 @@ class lunaDataGrid {
                 
             }
             
-            $r[] = '</select>';
+            $r[] = '</select></label>';
             
         endif;
         
