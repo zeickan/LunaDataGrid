@@ -251,8 +251,6 @@ class lunaDataGrid {
             
         }
         
-        //$consult = "SELECT ".join(',',$this->colData)." FROM ".$this->table." {$where} {$order} {$limit}"; 
-
         $consult = str_replace("\\","", "SELECT ".join(',',$this->colData)." FROM ".$this->table." {$where} {$order} {$limit}" );
         
         $this->consult = $consult;
