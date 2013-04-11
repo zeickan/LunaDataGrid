@@ -9,6 +9,33 @@ header {
     margin: 0 auto;
 }
 
+nav {
+    width: 800px;
+    margin:  0 auto;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0px;
+    margin: 0;
+}
+
+nav ul li {
+    font-size: 0.9em;
+    float: left;
+    margin-right: 1em;
+}
+
+nav ul li a {
+    color: rgba(200,200,200,0.7);
+    text-decoration: none;
+}
+
+nav ul li a:hover {
+    color: rgba(200,200,200,0.9);
+}
+
+
 h1,h2,h3,h4,h5,h6 {
     padding:5px;
     text-align: left;
@@ -19,12 +46,21 @@ h1,h2,h3,h4,h5,h6 {
     font-weight: 300;
 }
 
+section {
+    clear: both;
+    display: block;
+    width: 800px;
+    margin: 0px auto;
+    padding: 20px 0px;
+    font-size: 16px;
+}
+
 /* LunaDataGrid */
 
 
 .lunaGrid {
     font-size: 20px;
-    width: 960px;
+    width: 800px;
     border-collapse: collapse;
     text-align: left;
     margin: 20px auto;
