@@ -283,7 +283,19 @@ class lunaDataGrid {
         
         $html = '<table class="lunaGrid">';
         
-        $html.= ($this->title)?"<caption>{$this->title}</caption>":'';
+        if( !$this->ajax ):
+            
+            $form = '<form action="?" method="post" enctype="form-data/multipart">';
+            $form.= '<input type="text" class="lunaFinder">';
+            $form.= '</form>';
+        
+        else:
+        
+            $form = '<input type="text" class="lunaFinder">';
+        
+        endif;
+        
+        $html.= ($this->title)?'<caption>'.$form.''.$this->title.'</caption>':'';
         
         /* THEAD */
         
