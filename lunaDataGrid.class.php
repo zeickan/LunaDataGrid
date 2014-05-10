@@ -440,11 +440,11 @@ class lunaDataGrid {
     
             if( $this->pag > 1 ){
                 
-                $pagination[] = '<a href="'.$file.'" data-pag="0">&laquo; Primera página</a> ';
+                $pagination[] = '<a href="'.$file.'" data-pag="0">&laquo; First</a> ';
                 
                 if( $pag != 2):
                 
-                    $pagination[] = '<a href="'.$file.'pag='.(($this->pag)-1).'" data-pag="'.(($this->pag)-1).'">&laquo; Anterior</a>';
+                    $pagination[] = '<a href="'.$file.'pag='.(($this->pag)-1).'" data-pag="'.(($this->pag)-1).'">&laquo; Back</a>';
                     
                 endif;
             }
@@ -492,9 +492,9 @@ class lunaDataGrid {
         
             if( $this->pag < $this->pages ){
                 
-                $pagination[] = '<a href="'.$file.'pag='.($this->pag+1).'" data-pag="'.($this->pag+1).'">Siguiente &raquo;</a>';
+                $pagination[] = '<a href="'.$file.'pag='.($this->pag+1).'" data-pag="'.($this->pag+1).'">Next &raquo;</a>';
                 
-                $pagination[] = '<a href="'.$file.'pag='.$this->pages.'"  data-pag="'.$this->pages.'">Ultima página &raquo;</a>';
+                $pagination[] = '<a href="'.$file.'pag='.$this->pages.'"  data-pag="'.$this->pages.'">Last &raquo;</a>';
                 
             }
             

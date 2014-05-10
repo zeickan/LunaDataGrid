@@ -2,29 +2,30 @@
 
 require_once 'lunaDataGrid.class.php';
 
-$grid = new lunaDataGrid("users INNER JOIN users_profile ON users.username = users_profile.aka");
+$grid = new lunaDataGrid("user_auth INNER JOIN user_profile ON user_auth.id = user_profile.parent_id");
 
-$grid->title = "Lista de usuarios";
+$grid->title = "List";
 
-$grid->colName = array("ID","Usuario","Email","Nombre","Acciones");
+$grid->colName = array("ID","User","Mail","First Name","Last Name","Country","Buttons");
 
-$grid->colData = array('users.id', 'users.username', 'users.mail', "CONCAT(users_profile.`name` ,' ', users_profile.last_name ) as nombre");
+$grid->colData = array('user_auth.id', 'user_auth.username', 'user_auth.email', 'user_profile.first_name', 'user_profile.last_name', 'user_profile.country');
 
 $grid->order = "id ASC";
 
 $grid->pagination = true;
     
-$grid->max = 3;
+$grid->max = 10;
 
 //$grid->checkbox = true;
 
-//$grid->editableField = array( "username" => "input" ,"token" => "textarea" );
+$grid->editableField = array( "username" => "input" ,"email" => "textarea" );
 
 //$grid->colRelationship = array( "users.group_id|users_groups" );
 
-$grid->setButton("Editar","edit.php?id=%id%");
+$grid->setButton("Edit","edit.php?id=%id%");
 
-$grid->setButton("Eliminar","del.php?id=%id%");
+$grid->setButton("Delete","del.php?id=%id%");
+
 
 $table = $grid->build();
 
