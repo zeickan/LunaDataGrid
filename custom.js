@@ -17,11 +17,11 @@ $(document).ready(function() {
              * table:  'first_table INNER JOIN secound_table ON first_table.relid = first_table.relid',
              */
             
-            table:  'users INNER JOIN users_profile ON users.username = users_profile.aka',
-            
+            table:  'user_auth INNER JOIN user_profile ON user_auth.id = user_profile.parent_id',
+                    
             where:  ["1=1"],
-            
-            order:  "users.id DESC",
+
+            order:  "user_auth.id DESC",
             
             /* Columnas
              * colname array Define el nombre de las columnas para la tabla (HTML)
@@ -30,9 +30,9 @@ $(document).ready(function() {
              * 
             */
             
-            colname : ["ID","Usuario","Correo","Grupo","Acciones"],
+            colname : ["ID","User","Mail","First Name","Last Name","Country","Buttons"],
             
-            coldata : ["users.id","users.username","users.mail","users.group_id"],
+            coldata : ['user_auth.id', 'user_auth.username', 'user_auth.email', 'user_profile.first_name', 'user_profile.last_name', 'user_profile.country'],
             
             /* Paginaci—n
              *
